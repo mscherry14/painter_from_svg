@@ -34,6 +34,12 @@ You can run the command in terminal or add dependency to `pubspec.yaml`manually.
 flutter pub add dev:painter_from_svg
 ```
 
+For noe generated code uses `path_drawing` package for parsing Path from string. You need to install this dependency manually:
+
+```shell
+flutter pub add path_drawing
+```
+
 ## Usage
 
 Simply run 
