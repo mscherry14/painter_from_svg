@@ -1,6 +1,6 @@
 name: painter_from_svg
 description: "A Flutter CLI for generating icon files based on CustomPainter for `.svg` files."
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/mscherry14/painter_from_svg
 
 environment:
