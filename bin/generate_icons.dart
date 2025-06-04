@@ -25,7 +25,8 @@ Future<void> main(List<String> args) async {
           'gen',
           abbr: 'g',
           negatable: true,
-          help: 'Provide --no-gen if you want to generate files without .g. in extension',
+          help:
+              'Provide --no-gen if you want to generate files without .g. in extension',
         )
         ..addFlag(
           'help',
@@ -37,7 +38,7 @@ Future<void> main(List<String> args) async {
   final results = parser.parse(args);
 
   if (results['help'] as bool) {
-    print(parser.usage);
+    stdout.writeln(parser.usage);
     exit(0);
   }
 
@@ -49,9 +50,11 @@ Future<void> main(List<String> args) async {
   final outputIconsPartFolder =
       results['output-icons'] ?? config['output-icons'] ?? 'icons';
 
-
   final outputIconsFolder = p.join(outputFolder, outputIconsPartFolder);
-  final customIconsPath = p.join(outputFolder, isGenExt ? "custom_icons.g.dart" : "custom_icons.dart");
+  final customIconsPath = p.join(
+    outputFolder,
+    isGenExt ? "custom_icons.g.dart" : "custom_icons.dart",
+  );
 
   final svgFiles = await _findSvgFiles(inputFolder);
 
@@ -86,9 +89,9 @@ Future<void> main(List<String> args) async {
     ..createSync(recursive: true)
     ..writeAsStringSync(customIconsContent);
 
-  print('Иконки сгенерированы:');
-  print(' - Файлы с иконками: $outputFolder');
-  print(' - Общий файл класса: $customIconsPath');
+  stdout.writeln('Иконки сгенерированы:');
+  stdout.writeln(' - Файлы с иконками: $outputFolder');
+  stdout.writeln(' - Общий файл класса: $customIconsPath');
 }
 
 Future<List<File>> _findSvgFiles(String folder) async {

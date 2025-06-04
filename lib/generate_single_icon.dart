@@ -13,35 +13,35 @@ String? generateIconFile(String content, String className) {
   }
   final sizeParams = [
     Field(
-          (b) =>
-      b
-        ..name = "area"
-        ..type = refer("double")
-        ..modifier = FieldModifier.final$
-        ..assignment = Code('${sizes.area}'),
+      (b) =>
+          b
+            ..name = "area"
+            ..type = refer("double")
+            ..modifier = FieldModifier.final$
+            ..assignment = Code('${sizes.area}'),
     ),
     Field(
-          (b) =>
-      b
-        ..name = "widthOffset"
-        ..type = refer("double")
-        ..modifier = FieldModifier.final$
-        ..assignment = Code('${sizes.widthOffset}'),
+      (b) =>
+          b
+            ..name = "widthOffset"
+            ..type = refer("double")
+            ..modifier = FieldModifier.final$
+            ..assignment = Code('${sizes.widthOffset}'),
     ),
     Field(
-          (b) =>
-      b
-        ..name = "heightOffset"
-        ..type = refer("double")
-        ..modifier = FieldModifier.final$
-        ..assignment = Code('${sizes.heightOffset}'),
+      (b) =>
+          b
+            ..name = "heightOffset"
+            ..type = refer("double")
+            ..modifier = FieldModifier.final$
+            ..assignment = Code('${sizes.heightOffset}'),
     ),
   ];
 
   final paintingList =
-  document.rootElement.children
-      .where((node) => node is XmlElement)
-      .toList();
+      document.rootElement.children
+          .whereType<XmlElement>()
+          .toList();
 
   final cls = _corePainterClass(
     className: className,
@@ -50,14 +50,14 @@ String? generateIconFile(String content, String className) {
   );
 
   final lib = Library(
-        (b) =>
-    b
-      ..directives.addAll([
-        Directive.import('package:flutter/rendering.dart'),
-        Directive.import('package:path_drawing/path_drawing.dart'),
-        Directive.import('dart:math', show: ['sqrt']),
-      ])
-      ..body.addAll([cls]),
+    (b) =>
+        b
+          ..directives.addAll([
+            Directive.import('package:flutter/rendering.dart'),
+            Directive.import('package:path_drawing/path_drawing.dart'),
+            Directive.import('dart:math', show: ['sqrt']),
+          ])
+          ..body.addAll([cls]),
   );
   final emitter = DartEmitter();
 
@@ -89,25 +89,25 @@ Method _generatePaintMethod(List<XmlNode> paints) {
 
   final code = Block.of(codeList);
   return Method.returnsVoid(
-        (m) =>
-    m
-      ..name = "paint"
-      ..annotations.add(refer('override'))
-      ..requiredParameters.addAll([
-        Parameter(
+    (m) =>
+        m
+          ..name = "paint"
+          ..annotations.add(refer('override'))
+          ..requiredParameters.addAll([
+            Parameter(
               (p) =>
-          p
-            ..name = "canvas"
-            ..type = refer("Canvas"),
-        ),
-        Parameter(
+                  p
+                    ..name = "canvas"
+                    ..type = refer("Canvas"),
+            ),
+            Parameter(
               (p) =>
-          p
-            ..name = "size"
-            ..type = refer("Size"),
-        ),
-      ])
-      ..body = code,
+                  p
+                    ..name = "size"
+                    ..type = refer("Size"),
+            ),
+          ])
+          ..body = code,
   );
 }
 
@@ -117,73 +117,73 @@ Class _corePainterClass({
   required Method paintMethod,
 }) {
   final shouldRepaintMethod = Method(
-        (a) =>
-    a
-      ..name = "shouldRepaint"
-      ..returns = refer("bool")
-      ..annotations.add(refer('override'))
-      ..requiredParameters.add(
-        Parameter(
+    (a) =>
+        a
+          ..name = "shouldRepaint"
+          ..returns = refer("bool")
+          ..annotations.add(refer('override'))
+          ..requiredParameters.add(
+            Parameter(
               (p) =>
-          p
-            ..name = "oldDelegate"
-            ..type = refer(
-              "CustomPainter",
-              'package:flutter/rendering.dart',
+                  p
+                    ..name = "oldDelegate"
+                    ..type = refer(
+                      "CustomPainter",
+                      'package:flutter/rendering.dart',
+                    ),
             ),
-        ),
-      )
-      ..body = const Code('return true;'),
+          )
+          ..body = const Code('return true;'),
   );
 
   final painter = Class(
-        (b) =>
-    b
-      ..name = "${className}IconPainter"
-      ..extend = refer('CustomPainter')
-      ..methods.addAll([paintMethod, shouldRepaintMethod])
-      ..constructors.add(
-        Constructor(
+    (b) =>
+        b
+          ..name = "${className}IconPainter"
+          ..extend = refer('CustomPainter')
+          ..methods.addAll([paintMethod, shouldRepaintMethod])
+          ..constructors.add(
+            Constructor(
               (b) =>
-          b
-            ..constant = true
-            ..optionalParameters.addAll([
-              Parameter(
-                    (b) =>
-                b
-                  ..required = true
-                  ..toThis = true
-                  ..name = "color"
-                  ..named = true,
-              ),
-              Parameter(
-                    (b) =>
-                b
-                  ..required = true
-                  ..toThis = true
-                  ..name = "dimension"
-                  ..named = true,
-              ),
-            ]),
-        ),
-      )
-      ..fields.addAll([
-        Field(
+                  b
+                    ..constant = true
+                    ..optionalParameters.addAll([
+                      Parameter(
+                        (b) =>
+                            b
+                              ..required = true
+                              ..toThis = true
+                              ..name = "color"
+                              ..named = true,
+                      ),
+                      Parameter(
+                        (b) =>
+                            b
+                              ..required = true
+                              ..toThis = true
+                              ..name = "dimension"
+                              ..named = true,
+                      ),
+                    ]),
+            ),
+          )
+          ..fields.addAll([
+            Field(
               (b) =>
-          b
-            ..type = refer("Color")
-            ..name = "color"
-            ..modifier = FieldModifier.final$,
-        ),
-        Field(
+                  b
+                    ..type = refer("Color")
+                    ..name = "color"
+                    ..modifier = FieldModifier.final$,
+            ),
+            Field(
               (b) =>
-          b
-            ..type = refer("double")
-            ..name = "dimension"
-            ..modifier = FieldModifier.final$,
-        ),
-        ...sizeParams,
-      ]),
+                  b
+                    ..type = refer("double")
+                    ..name = "dimension"
+                    ..modifier = FieldModifier.final$,
+            ),
+            ...sizeParams,
+          ]),
   );
 
   return painter;
