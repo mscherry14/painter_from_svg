@@ -3,6 +3,15 @@ import 'package:code_builder/code_builder.dart';
 import 'package:painter_from_svg/svg_parsing.dart';
 import 'package:xml/xml.dart';
 
+/// Generates a Dart file defining a CustomPainter class for an SVG icon.
+///
+/// This function parses the SVG content, extracts path elements,
+/// and generates a Dart class named `<className>IconPainter` that extends [CustomPainter].
+///
+/// The generated painter will render the icon scaled to the given `dimension`
+/// and colored with the given `color`.
+///
+/// Returns `null` if the SVG size data cannot be parsed.
 String? generateIconFile(String content, String className) {
   final document = XmlDocument.parse(content);
 
@@ -39,9 +48,7 @@ String? generateIconFile(String content, String className) {
   ];
 
   final paintingList =
-      document.rootElement.children
-          .whereType<XmlElement>()
-          .toList();
+      document.rootElement.children.whereType<XmlElement>().toList();
 
   final cls = _corePainterClass(
     className: className,

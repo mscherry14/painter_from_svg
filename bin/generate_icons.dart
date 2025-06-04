@@ -7,6 +7,18 @@ import 'package:path/path.dart' as p;
 import 'package:glob/glob.dart';
 import 'package:glob/list_local_fs.dart'; // обязательно
 
+/// Entry point for the SVG-to-Dart icon generator CLI tool.
+///
+/// Accepts command-line options or values from `icons.yaml`.
+/// Generates Dart files for each SVG icon and an aggregated
+/// `custom_icons.dart` file with accessors and a `CustomIcon` widget.
+///
+/// Options:
+///   - `--input`, `-i`: Input folder with SVG files (default: `assets/icons`)
+///   - `--output`, `-o`: Output folder for generated Dart files (default: `lib/generated`)
+///   - `--output-icons`, `-f`: Subfolder in output folder to store icon files (default: `icons`)
+///   - `--[no-]gen`, `-g`: Whether to include `.g.dart` suffix in filenames (default: true)
+///   - `--help`, `-h`: Print help message
 Future<void> main(List<String> args) async {
   final parser =
       ArgParser()
@@ -94,6 +106,7 @@ Future<void> main(List<String> args) async {
   stdout.writeln(' - Общий файл класса: $customIconsPath');
 }
 
+/// Finds all `.svg` files in the given [folder] using a glob pattern.
 Future<List<File>> _findSvgFiles(String folder) async {
   final glob = Glob('$folder/*.svg');
   final matches = <File>[];
@@ -107,6 +120,9 @@ Future<List<File>> _findSvgFiles(String folder) async {
   return matches;
 }
 
+/// Loads configuration from a local `icons.yaml` file if it exists.
+///
+/// Returns a map of values that can override CLI arguments.
 Map<String, dynamic> _loadYamlConfig() {
   final file = File('icons.yaml');
   if (!file.existsSync()) return {};
@@ -115,6 +131,9 @@ Map<String, dynamic> _loadYamlConfig() {
   return Map<String, dynamic>.from(yamlMap);
 }
 
+/// Converts a given [file] into a valid Dart class name in PascalCase.
+///
+/// Removes invalid characters and leading digits.
 String _getClassName(File file) {
   final sanitizedName = p
       .basenameWithoutExtension(file.path)

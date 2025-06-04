@@ -2,6 +2,17 @@ import 'package:dart_style/dart_style.dart';
 import 'package:code_builder/code_builder.dart';
 import 'package:path/path.dart' as p;
 
+/// Generates a Dart file containing a class `CustomIcons` with static icon painters
+/// and a `CustomIcon` widget that can be used to render them.
+///
+/// Each icon painter is expected to be a class with the name `<ClassName>IconPainter`
+/// that implements `CustomPainter`.
+///
+/// [classNames] is a list of base class names (e.g. "Search") that map to painters like `SearchIconPainter`.
+/// [filesNames] is a list of Dart files to import where these painters are defined.
+/// [folder] is an optional subfolder where those files are located.
+///
+/// Returns the source code as a formatted Dart string.
 String generateCustomIconsFile({
   required List<String> classNames,
   required List<String> filesNames,

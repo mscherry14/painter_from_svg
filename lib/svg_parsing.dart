@@ -1,11 +1,18 @@
 import 'package:code_builder/code_builder.dart';
 import 'package:xml/xml.dart';
 
+/// Stores precomputed size and offset information extracted from an SVG.
 class SvgSizeData {
+  /// The overall area of the SVG viewport, used for scaling.
   final double area;
+
+  /// Horizontal offset to apply to all paths.
   final double widthOffset;
+
+  /// Vertical offset to apply to all paths.
   final double heightOffset;
 
+  /// Creates a new [SvgSizeData] with the given [area], [widthOffset], and [heightOffset].
   SvgSizeData({
     required this.area,
     required this.widthOffset,
@@ -13,8 +20,13 @@ class SvgSizeData {
   });
 }
 
-///Parse area and offsets from svg component attributes. If
-///can't do parsing (incorrect data), returns null.
+/// Parses the area and offsets from an SVG `<svg>` element's attributes.
+///
+/// This function first attempts to extract and parse the `viewBox` attribute.
+/// If `viewBox` is missing or malformed, it falls back to `width` and `height`
+/// attributes. If neither is usable, returns `null`.
+///
+/// Returns a [SvgSizeData] instance on success, or `null` if parsing fails.
 SvgSizeData? parseSvgSizeData(XmlElement svg) {
   final viewBox = svg.getAttribute('viewBox');
 
@@ -55,8 +67,18 @@ SvgSizeData? parseSvgSizeData(XmlElement svg) {
   }
 }
 
-///Returns list of styles like list of [Code], which ypu need to apply to Paint()
-///or null if styles parsing goes wrong
+/// Parses paint styles from an SVG element and returns a list of [Code] statements
+/// to apply to a `Paint()` object.
+///
+/// Supports `fill`, `stroke`, `stroke-width`, `stroke-linecap`, and `stroke-linejoin`.
+/// Returns `null` if no valid style attributes are found or if the style is unsupported.
+///
+/// Example output:
+/// ```dart
+/// ..style = PaintingStyle.stroke
+/// ..strokeWidth = 2.0
+/// ..strokeCap = StrokeCap.round
+/// ```
 List<Code>? parseStyle(XmlElement elem) {
   final List<Code> stylesCodes = [];
   if (elem.getAttribute("fill") != null &&
